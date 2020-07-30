@@ -16,7 +16,7 @@ data "template_file" "kubectl_config" {
 resource "aws_eks_cluster" "main_eks" {
   name     = local.cluster_name
   role_arn = aws_iam_role.eks_master_role.arn
-  version  = "1.14"
+  version  = "1.16"
 
   vpc_config {
     endpoint_public_access  = true

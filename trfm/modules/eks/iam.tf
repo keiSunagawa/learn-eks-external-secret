@@ -27,6 +27,12 @@ resource "aws_iam_role_policy_attachment" "eks_service_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.eks_master_role.name
 }
+
+resource "aws_iam_role_policy_attachment" "eks_master_role_secret_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+  role       = aws_iam_role.eks_master_role.name
+}
+
 # resource "aws_iam_role_policy_attachment" "eks_worker_role_farget_policy" {
 #   policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonEKSForFargateServiceRolePolicy"
 #   role       = aws_iam_role.eks_master_role.name
@@ -44,6 +50,7 @@ resource "aws_iam_role" "eks_worker_role" {
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": [
+          "ec2.amazonaws.com",
           "eks.amazonaws.com",
           "eks-fargate-pods.amazonaws.com"
         ]
@@ -79,6 +86,11 @@ resource "aws_iam_role_policy_attachment" "eks_worker_role_ecs_policy" {
 
 resource "aws_iam_role_policy_attachment" "eks_worker_role_cw_policy" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  role       = aws_iam_role.eks_worker_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_worker_role_secret_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
   role       = aws_iam_role.eks_worker_role.name
 }
 
