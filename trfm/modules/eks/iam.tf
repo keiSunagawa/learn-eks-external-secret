@@ -55,7 +55,34 @@ resource "aws_iam_role" "eks_worker_role" {
 EOS
 }
 
-resource "aws_iam_role_policy_attachment" "eks_worker_role_ecs_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
+# fargate
+# resource "aws_iam_role_policy_attachment" "eks_worker_role_ecs_policy" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSFargatePodExecutionRolePolicy"
+#   role       = aws_iam_role.eks_worker_role.name
+# }
+
+# node group
+resource "aws_iam_role_policy_attachment" "eks_worker_role_worker_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.eks_worker_role.name
 }
+
+resource "aws_iam_role_policy_attachment" "eks_worker_role_cni_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = aws_iam_role.eks_worker_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_worker_role_ecs_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = aws_iam_role.eks_worker_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_worker_role_cw_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  role       = aws_iam_role.eks_worker_role.name
+}
+
+# resource "aws_iam_instance_profile" "eks_worker_role_profile" {
+#   name = "${var.prefix}_eks_worker_profile"
+#   role = "${aws_iam_role.eks_worker_role.name}"
+# }
