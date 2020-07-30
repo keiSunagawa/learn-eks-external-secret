@@ -10,4 +10,9 @@ resource "aws_eks_fargate_profile" "example" {
       "k8s-app" = "kube-dns"
     }
   }
+
+  timeouts {
+    create = "20m"
+    delete = "20m"
+  }
 }

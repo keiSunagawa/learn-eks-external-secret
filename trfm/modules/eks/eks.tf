@@ -27,4 +27,9 @@ resource "aws_eks_cluster" "main_eks" {
     )
     security_group_ids = [aws_security_group.eks_master_pub_api_sg.id, var.inter_sg_id]
   }
+
+  timeouts {
+    create = "20m"
+    delete = "20m"
+  }
 }
